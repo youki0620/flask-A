@@ -1,4 +1,4 @@
-from flask import Flask, render_template,request
+from flask import Flask, render_template,request,redirect
 
 
 import sqlite3,random
@@ -76,16 +76,42 @@ def list():
     return render_template("list.html",task_list=task_list)
 
 @app.route("/edit/<int:id>")
-def edit(id)
+def edit(id):
     conn = sqlite3.connect("task.db")
     c = conn.cursor()
     c.execute("select task from tasks where id = ?;",(id,))
     task = c.fetchone()
-    print(task)
     c.close()
-    return "取れたよ"
+    if task is not None:
+        task = task[0]
+    else:
+        return "タスクがないよ"
+    print(task)
+    item = {"id":id,"task":task}
+    return render_template("edit.html",item = item)
 
 
+# -----------五日目----------------
+
+@app.route("/edit",methods=["POST"])
+def edit_post():
+    task_id = request.form.get("task_id")
+    task = request.form.get("task")
+    conn = sqlite3.connect("task.db")
+    c = conn.cursor()
+    c.execute("update tasks set task = ? where id = ?",(task,task_id))
+    conn.commit()
+    c.close()
+    return redirect("/list")
+
+@app.route("/del/<int:id>" ,methods=["POST"])
+def del_task(id):
+    conn = sqlite3.connect("task.db")
+    c = conn.cursor()
+    c.execute("delete from tasks where id = ?;",(id,))
+    conn.commit()
+    c.close()
+    return redirect("/list")
 
 if __name__=="__main__":
     app.run(debug=True)

@@ -6,7 +6,13 @@
     <tr>
         <td>{{item["id"]}}</td> 
         <td>{{item["task"]}}</td>
-        <td><a href="/edit">編集</a></td>
+        <!-- <td><a href="/edit">編集</a></td> -->
+        <td><a href="/edit/{{item['id']}}">編集</a></td>
+        <td>
+            <form action="/del/{{item['id']}}" method="post">
+                <input type="submit" value="削除">
+            </form>
+        </td>
     </tr>
     {% endfor %}
 </table>

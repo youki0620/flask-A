@@ -1,8 +1,9 @@
 {% extends"base.html"%}
 {% block content %}
 
-<form>
-    <input type="text" size="50" name="task_id">
+<form action="/edit" method="post">
+    <input type="hidden" size="50" name="task_id" value="{{item['id']}}">
+    <input type="text" size="50" name="task" value="{{item['task']}}">
     <input type="submit" name="save" value="更新">
 </form>
 
