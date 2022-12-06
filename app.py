@@ -61,6 +61,31 @@ def add_post():
     c.close()
     return"登録完了"
 
+# -----------3日目------------
+
+@app.route("/list")
+def list():
+    conn = sqlite3.connect("task.db")
+    c = conn.cursor()
+    c.execute("select id,task from tasks;")
+    task_list = []
+    for row in c.fetchall():
+        task_list.append({"id":row[0], "task":row[1]})
+    print(task_list)
+    c.close()
+    return render_template("list.html",task_list=task_list)
+
+@app.route("/edit/<int:id>")
+def edit(id)
+    conn = sqlite3.connect("task.db")
+    c = conn.cursor()
+    c.execute("select task from tasks where id = ?;",(id,))
+    task = c.fetchone()
+    print(task)
+    c.close()
+    return "取れたよ"
+
+
 
 if __name__=="__main__":
     app.run(debug=True)
